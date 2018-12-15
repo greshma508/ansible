@@ -1,0 +1,27 @@
+---
+- name: Create a new Demo EC2 instance
+  hosts: node1
+  gather_facts: False
+
+  vars:
+      region: ap-south-1
+      instance_type: t2.micro
+      ami: ami-0bc6e84391ec20816  # Ubuntu 16.04 LTS
+      keypair: greshma508 # pem file name
+
+  tasks:
+
+    - name: Create an ec2 instance
+      ec2:
+         key_name: "{{ keypair }}"
+         aws_access_key: AKIAJDIFCLPLWRVBXR3Q
+         aws_secret_key: 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
+         group_id: sg-0aec93b3a63ef6db5  # security group name
+         instance_type: "{{ instance_type}}"
+         image: "{{ ami }}"
+         wait: true
+         region: "{{ region }}"
+         count: 1
+         vpc_subnet_id: subnet-be90d9d6
+         assign_public_ip: yes
+      register: ec2
